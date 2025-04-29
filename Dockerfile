@@ -29,9 +29,13 @@ RUN cd /app && \
 # Create a symlink for MeCab
 RUN ln -s /usr/lib/x86_64-linux-gnu/libmecab.so.2 /usr/lib/libmecab.so
 
+# Create a wrapper for MeCab
+RUN echo 'module MeCab; end' > /app/lib/mecab_wrapper.rb
+
 # Install dependencies
 RUN bundle install && \
     yarn install
 
-# Container startup command
+# Container startup command in development mode
+ENV RAILS_ENV=development
 CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0", "-p", "3000"]
