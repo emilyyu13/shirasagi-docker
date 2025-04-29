@@ -39,6 +39,9 @@ RUN sed -i 's/raise SS::NotFoundError/Rails.logger.debug("Page not found, but co
 RUN bundle install && \
     yarn install
 
+# Precompile assets
+RUN bundle exec rake assets:precompile RAILS_ENV=development
+
 # Create startup script with database initialization and basic setup
 RUN echo '#!/bin/bash \n\
 bundle exec rake db:drop db:create \n\
