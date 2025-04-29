@@ -26,9 +26,8 @@ RUN cd /app && \
     cp -n config/samples/mongoid.yml config/mongoid.yml && \
     sed -i 's/localhost:27017/mongodb:27017/g' config/mongoid.yml
 
-# Install MeCab gem with native extensions
-RUN apt-get update && apt-get install -y mecab-ipadic && \
-    gem install mecab-ruby
+# Create a symlink for MeCab
+RUN ln -s /usr/lib/x86_64-linux-gnu/libmecab.so.2 /usr/lib/libmecab.so
 
 # Install dependencies
 RUN bundle install && \
