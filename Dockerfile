@@ -7,6 +7,10 @@ RUN apt-get update -qq && apt-get install -y \
     npm \
     imagemagick \
     git \
+    mecab \
+    libmecab-dev \
+    mecab-ipadic-utf8 \
+    ruby-mecab \
     && rm -rf /var/lib/apt/lists/*
 
 # 安装 yarn
