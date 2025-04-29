@@ -36,6 +36,15 @@ RUN echo 'module MeCab; end' > /app/lib/mecab_wrapper.rb
 RUN bundle install && \
     yarn install
 
+# Initialize the database with a site and admin user
+RUN echo '#!/bin/bash \n\
+bundle exec rake db:drop db:create \n\
+bundle exec rake ss:create_site data="{ name: \"SHIRASAGI\", host: \"www\", domains: \"localhost:3000\" }" \n\
+bundle exec rake ss:create_user data="{ name: \"システム管理者\", email: \"sys@example.jp\", password: \"pass\" }" \n\
+bundle exec rails s -b 0.0.0.0 -p 3000 \
+' > /app/start.sh && \
+chmod +x /app/start.sh
+
 # Container startup command in development mode
 ENV RAILS_ENV=development
-CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0", "-p", "3000"]
+CMD ["/app/start.sh"]
