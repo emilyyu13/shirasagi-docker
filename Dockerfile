@@ -44,10 +44,10 @@ RUN echo '#!/bin/bash \n\
 bundle exec rake db:drop db:create \n\
 bundle exec rake ss:create_site data="{ name: \"SHIRASAGI\", host: \"www\", domains: \"localhost:3000\" }" \n\
 bundle exec rake ss:create_user data="{ name: \"システム管理者\", email: \"sys@example.jp\", password: \"pass\" }" \n\
-bundle exec rake cms:set_site_id site=www \n\
-bundle exec rake cms:set_admin_role user=sys@example.jp site=www \n\
-bundle exec rake cms:create_node name=トップページ filename=index layout=top \n\
-bundle exec rake cms:create_page name=トップページ filename=index layout=top html="<h1>Welcome to SHIRASAGI</h1><p>This is the demo site.</p>" \n\
+echo "Creating basic content..." \n\
+bundle exec rails r "Cms::Node.create!(site_id: 1, name: \"トップページ\", filename: \"index\", route: \"cms/node\", state: \"public\")" || true \n\
+bundle exec rails r "Cms::Page.create!(site_id: 1, name: \"トップページ\", filename: \"index\", route: \"cms/page\", state: \"public\", html: \"<h1>Welcome to SHIRASAGI</h1><p>This is the demo site.</p>\")" || true \n\
+echo "Starting Rails server..." \n\
 bundle exec rails s -b 0.0.0.0 -p 3000 \
 ' > /app/start.sh && \
 chmod +x /app/start.sh
