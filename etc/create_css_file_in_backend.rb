@@ -217,7 +217,8 @@ file.filename = "kanamic.css"
 file.content_type = "text/css"
 file.site_id = site.id
 file.user_id = user.id
-file.group_ids = [group.id]
+# SS::File doesn't have group_ids attribute
+# file.group_ids = [group.id]
 
 # Read the file content
 file_content = Fs.binread(css_file_path)
