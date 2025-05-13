@@ -5,7 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./shirasagi:/app
       - ./etc:/app/etc
       - ./files:/app/files
     ports:
