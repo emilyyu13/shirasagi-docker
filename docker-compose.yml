@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./shirasagi:/app
+      - ./etc:/app/etc
+      - ./files:/app/files
     ports:
       - "3000:3000"
     depends_on:

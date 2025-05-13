@@ -325,18 +325,33 @@ docker-compose run app bundle exec rails r "
     '
   )
   
-  css_node = Cms::Node.create!(
+  uploader_node = Cms::Node.create!(
     site_id: site.id,
-    name: 'CSS',
-    filename: 'css',
-    route: 'cms/node',
+    name: 'ファイル',
+    filename: 'uploader',
+    route: 'uploader/file',
     state: 'public'
   )
+  puts "Created uploader node: #{uploader_node.name} (#{uploader_node.id})"
   
-  Dir.glob "files/**/*.*" do |file|
-    puts name = file.sub(/^files\//, "")
-    Fs.binwrite "#{site.path}/#{name}", File.binread(file)
-  end
+  css_dir = "#{site.path}/uploader/css"
+  Fs.mkdir_p(css_dir) unless Fs.exist?(css_dir)
+  puts "Created CSS directory: #{css_dir}"
+  
+  css_content = File.read('/app/files/css/kanamic.css')
+  css_path = "#{css_dir}/kanamic.css"
+  Fs.binwrite(css_path, css_content)
+  puts "CSS file uploaded to #{css_path}"
+  
+  file_model = SS::File.new
+  file_model.site_id = site.id
+  file_model.model = 'ss/file'
+  file_model.name = 'kanamic.css'
+  file_model.filename = 'kanamic.css'
+  file_model.content_type = 'text/css'
+  file_model.path = css_path
+  file_model.save!
+  puts "File record created in database: #{file_model.name} (#{file_model.id})"
   
   
   layout = Cms::Layout.create!(
@@ -350,7 +365,7 @@ docker-compose run app bundle exec rails r "
         <meta charset=\"UTF-8\">
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
         <title>{{ page.name }} - カナミック</title>
-        <link rel=\"stylesheet\" href=\"/css/kanamic.css\">
+        <link rel=\"stylesheet\" href=\"/uploader/css/kanamic.css\">
       </head>
       <body>
         <header>
