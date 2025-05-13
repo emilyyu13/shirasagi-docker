@@ -48,15 +48,20 @@ file_model.in_file = ActionDispatch::Http::UploadedFile.new(
 file_model.save!
 puts "File record created in database: #{file_model.name} (#{file_model.id})"
 
-# Update the layout to reference the new CSS file location
+# Update the layout to reference the new CSS file location if it exists
 layout = Cms::Layout.find_by(site_id: site.id, filename: 'kanamic_layout')
 if layout
-  new_html = layout.html.gsub('/uploader/css/kanamic.css', '/files/css/kanamic.css')
-  layout.html = new_html
-  layout.save!
-  puts "Layout updated to reference new CSS file location"
+  # Only update if the layout contains a reference to the CSS file that needs updating
+  if layout.html.include?('/css/kanamic.css') || layout.html.include?('/uploader/css/kanamic.css')
+    new_html = layout.html.gsub(/\/(css|uploader\/css)\/kanamic\.css/, '/files/css/kanamic.css')
+    layout.html = new_html
+    layout.save!
+    puts "Layout updated to reference new CSS file location"
+  else
+    puts "Layout already has correct CSS reference"
+  end
 else
-  puts "Warning: Layout not found"
+  puts "Layout not found, but it will be created by the initialization script"
 end
 
 puts "CSS backend visibility fix completed successfully!"
