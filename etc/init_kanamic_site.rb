@@ -1,12 +1,11 @@
 # Initialize Kanamic site
 puts "Creating Kanamic site..."
 
-# Create site
-site = Cms::Site.create!(
-  name: "カナミック",
-  host: "kanamic",
-  domains: "kanamic.localhost:3000"
-)
+# Find or create site
+site = Cms::Site.find_or_create_by(host: "kanamic") do |s|
+  s.name = "カナミック"
+  s.domains = "kanamic.localhost:3000"
+end
 
 puts "Created site with ID: #{site.id}"
 
