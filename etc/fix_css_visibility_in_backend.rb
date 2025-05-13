@@ -38,7 +38,13 @@ file_model.model = 'ss/file'
 file_model.name = 'kanamic.css'
 file_model.filename = 'kanamic.css'
 file_model.content_type = 'text/css'
-file_model.path = css_path
+# Read the file content
+file_content = Fs.binread(css_path)
+file_model.in_file = ActionDispatch::Http::UploadedFile.new(
+  filename: 'kanamic.css',
+  type: 'text/css',
+  tempfile: Tempfile.new('kanamic.css').tap { |f| f.write(file_content); f.rewind }
+)
 file_model.save!
 puts "File record created in database: #{file_model.name} (#{file_model.id})"
 
