@@ -334,6 +334,7 @@ docker-compose run app bundle exec rails r "
   layout = Cms::Layout.create!(
     site_id: site.id,
     name: 'カナミックレイアウト',
+    filename: 'kanamic_layout',
     html: '
       <!DOCTYPE html>
       <html>
