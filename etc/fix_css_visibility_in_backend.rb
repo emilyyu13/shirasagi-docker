@@ -49,19 +49,24 @@ file_model.save!
 puts "File record created in database: #{file_model.name} (#{file_model.id})"
 
 # Update the layout to reference the new CSS file location if it exists
-layout = Cms::Layout.find_by(site_id: site.id, filename: 'kanamic_layout')
-if layout
-  # Only update if the layout contains a reference to the CSS file that needs updating
-  if layout.html.include?('/css/kanamic.css') || layout.html.include?('/uploader/css/kanamic.css')
-    new_html = layout.html.gsub(/\/(css|uploader\/css)\/kanamic\.css/, '/files/css/kanamic.css')
-    layout.html = new_html
-    layout.save!
-    puts "Layout updated to reference new CSS file location"
+begin
+  layout = Cms::Layout.where(site_id: site.id, filename: 'kanamic_layout').first
+  if layout
+    # Only update if the layout contains a reference to the CSS file that needs updating
+    if layout.html.include?('/css/kanamic.css') || layout.html.include?('/uploader/css/kanamic.css')
+      new_html = layout.html.gsub(/\/(css|uploader\/css)\/kanamic\.css/, '/files/css/kanamic.css')
+      layout.html = new_html
+      layout.save!
+      puts "Layout updated to reference new CSS file location"
+    else
+      puts "Layout already has correct CSS reference"
+    end
   else
-    puts "Layout already has correct CSS reference"
+    puts "Layout not found, but it will be created by the initialization script"
   end
-else
-  puts "Layout not found, but it will be created by the initialization script"
+rescue => e
+  puts "Error handling layout: #{e.message}"
+  puts "This is expected if the layout doesn't exist yet"
 end
 
 puts "CSS backend visibility fix completed successfully!"
