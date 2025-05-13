@@ -3,6 +3,14 @@ docker-compose run app rake ss:create_site data='{ name: "カナミック", host
 
 docker-compose run app bundle exec rails r "
   site = Cms::Site.find_by(host: 'kanamic')
+  site.group_ids = Cms::Group.all.pluck(:id)  # Associate with all groups
+  site.permission_level = 1                   # Set permission level
+  site.save!
+  puts 'Site visibility settings updated'
+"
+
+docker-compose run app bundle exec rails r "
+  site = Cms::Site.find_by(host: 'kanamic')
   
   top_node = Cms::Node.create!(
     site_id: site.id,
