@@ -325,6 +325,7 @@ docker-compose run app bundle exec rails r "
     state: 'public'
   )
   
+  
   css_page = Cms::Page.create!(
     site_id: site.id,
     name: 'kanamic.css',
@@ -532,8 +533,7 @@ body {
   border-radius: 30px;
   font-weight: bold;
   cursor: pointer;
-}',
-    format: 'text/css'
+}'
   )
   
   layout = Cms::Layout.create!(
