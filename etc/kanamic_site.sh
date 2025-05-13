@@ -532,9 +532,9 @@ body {
   border-radius: 30px;
   font-weight: bold;
   cursor: pointer;
-}',
-    format: 'text/css'
+}'
   )
+  
   
   layout = Cms::Layout.create!(
     site_id: site.id,
