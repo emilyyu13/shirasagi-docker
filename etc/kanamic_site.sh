@@ -325,16 +325,16 @@ docker-compose run app bundle exec rails r "
     '
   )
   
-  uploader_node = Cms::Node.create!(
+  file_node = Cms::Node.create!(
     site_id: site.id,
     name: 'ファイル',
-    filename: 'uploader',
+    filename: 'files',
     route: 'uploader/file',
     state: 'public'
   )
-  puts "Created uploader node: #{uploader_node.name} (#{uploader_node.id})"
+  puts "Created file node: #{file_node.name} (#{file_node.id})"
   
-  css_dir = "#{site.path}/uploader/css"
+  css_dir = "#{site.path}/files/css"
   Fs.mkdir_p(css_dir) unless Fs.exist?(css_dir)
   puts "Created CSS directory: #{css_dir}"
   
@@ -347,9 +347,20 @@ docker-compose run app bundle exec rails r "
   file_model.site_id = site.id
   file_model.model = 'ss/file'
   file_model.name = 'kanamic.css'
-  file_model.filename = 'kanamic.css'
+  file_model.filename = 'files/css/kanamic.css'
   file_model.content_type = 'text/css'
-  file_model.path = css_path
+  
+  file_content = Fs.binread(css_path)
+  tempfile = Tempfile.new(['kanamic', '.css'])
+  tempfile.write(file_content)
+  tempfile.rewind
+  
+  file_model.in_file = ActionDispatch::Http::UploadedFile.new(
+    filename: 'kanamic.css',
+    type: 'text/css',
+    tempfile: tempfile
+  )
+  
   file_model.save!
   puts "File record created in database: #{file_model.name} (#{file_model.id})"
   
@@ -365,7 +376,7 @@ docker-compose run app bundle exec rails r "
         <meta charset=\"UTF-8\">
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
         <title>{{ page.name }} - カナミック</title>
-        <link rel=\"stylesheet\" href=\"/uploader/css/kanamic.css\">
+        <link rel=\"stylesheet\" href=\"/files/css/kanamic.css\">
       </head>
       <body>
         <header>
