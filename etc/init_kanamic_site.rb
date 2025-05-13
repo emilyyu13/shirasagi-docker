@@ -12,7 +12,6 @@ puts "Created site with ID: #{site.id}"
 
 # Set site visibility
 site.group_ids = Cms::Group.all.pluck(:id)  # Associate with all groups
-site.permission_level = 1                   # Set permission level
 site.save!
 puts "Site visibility settings updated"
 
