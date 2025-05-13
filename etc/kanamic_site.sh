@@ -333,6 +333,14 @@ docker-compose run app bundle exec rails r "
     state: 'public'
   )
   
+  file_node = Cms::Node.create!(
+    site_id: site.id,
+    name: 'ファイル',
+    filename: 'files',
+    route: 'uploader/file',
+    state: 'public'
+  )
+  
   Dir.glob "files/**/*.*" do |file|
     puts name = file.sub(/^files\//, "")
     Fs.binwrite "#{site.path}/#{name}", File.binread(file)
