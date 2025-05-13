@@ -350,7 +350,7 @@ docker-compose run app bundle exec rails r "
         <meta charset=\"UTF-8\">
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
         <title>{{ page.name }} - カナミック</title>
-        <link rel=\"stylesheet\" href=\"/css/kanamic.css\">
+        <link rel=\"stylesheet\" href=\"/css/Kanami.css\">
       </head>
       <body>
         <header>
