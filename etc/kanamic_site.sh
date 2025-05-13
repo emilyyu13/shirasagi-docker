@@ -328,7 +328,7 @@ docker-compose run app bundle exec rails r "
   css_page = Cms::Page.create!(
     site_id: site.id,
     name: 'kanamic.css',
-    filename: 'css/kanamic.css',
+    filename: 'css/kanamic',
     route: 'cms/page',
     state: 'public',
     html: '/* Kanamic style */
@@ -546,7 +546,7 @@ body {
         <meta charset=\"UTF-8\">
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
         <title>{{ page.name }} - カナミック</title>
-        <link rel=\"stylesheet\" href=\"/css/kanamic.css\">
+        <link rel=\"stylesheet\" href=\"/css/kanamic\">
       </head>
       <body>
         <header>
