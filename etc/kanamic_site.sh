@@ -1,5 +1,6 @@
 
 docker-compose run app rake ss:create_site data='{ name: "カナミック", host: "kanamic", domains: "kanamic.localhost:3000" }'
+docker-compose run app rake db:seed site=kanamic name=kanamic
 
 docker-compose run app bundle exec rails r "
   site = Cms::Site.find_by(host: 'kanamic')
