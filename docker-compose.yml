@@ -4,8 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - ./shirasagi:/app
+    # volumes:
+    #   - ./shirasagi:/app
     ports:
       - "3000:3000"
     depends_on:
