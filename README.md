@@ -8,11 +8,6 @@ docker-compose up --build
 sh etc/init.sh
 ```
 
-## カナミック風サイトを作成する（ローカルで実行する）
-```
-sh etc/kanamic_site.sh
-```
-
 ## サイトの確認
 
 #### 管理画面
@@ -23,6 +18,3 @@ http://localhost:3000/.mypage にアクセスするとログイン画面が表�
 
 #### 公開画面
 http://localhost:3000にアクセスすると登録したデモサイトが表示されます。
-
-#### カナミック風サイト
-http://kanamic.localhost:3000 にアクセスするとカナミック風サイトが表示されます。
