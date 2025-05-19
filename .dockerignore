@@ -1,0 +1,10 @@
+# .dockerignore
+shirasagi/.git
+shirasagi/log
+shirasagi/tmp
+shirasagi/node_modules
+shirasagi/vendor
+shirasagi/.env
+shirasagi/public/assets
+shirasagi/coverage
+*.log
