@@ -18,9 +18,6 @@ RUN npm install -g yarn
 
 WORKDIR /app
 
-# Init/update shirasagi repository
-RUN git submodule update --init --recursive
-
 # Configure MongoDB connection
 RUN cd /app && \
     cp -n config/samples/mongoid.yml config/mongoid.yml && \
