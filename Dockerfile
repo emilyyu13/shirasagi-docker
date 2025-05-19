@@ -16,6 +16,8 @@ RUN apt-get update -qq && apt-get install -y \
 # Install yarn
 RUN npm install -g yarn
 
+COPY ./shirasagi /app
+
 WORKDIR /app
 
 # Configure MongoDB connection
