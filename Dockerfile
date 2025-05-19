@@ -18,8 +18,8 @@ RUN npm install -g yarn
 
 WORKDIR /app
 
-# Clone shirasagi repository
-RUN git clone https://github.com/shirasagi/shirasagi.git /app
+# Init/update shirasagi repository
+RUN git submodule update --init --recursive
 
 # Configure MongoDB connection
 RUN cd /app && \
