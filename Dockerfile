@@ -20,11 +20,6 @@ COPY ./shirasagi /app
 
 WORKDIR /app
 
-# Configure MongoDB connection
-RUN cd /app && \
-    cp -n config/samples/mongoid.yml config/mongoid.yml && \
-    sed -i 's/localhost:27017/mongodb:27017/g' config/mongoid.yml
-
 # Create a symlink for MeCab
 RUN ln -s /usr/lib/x86_64-linux-gnu/libmecab.so.2 /usr/lib/libmecab.so
 
@@ -38,21 +33,32 @@ RUN sed -i 's/raise SS::NotFoundError/Rails.logger.debug("Page not found, but co
 RUN bundle install && \
     yarn install
 
+RUN yarn add openlayers
+
+RUN mkdir -p vendor/assets/javascripts/openlayers && \
+    cp node_modules/openlayers/dist/ol.js vendor/assets/javascripts/openlayers/ol.js
+
+RUN mkdir -p vendor/assets/javascripts/gridster && \
+    curl -L https://raw.githubusercontent.com/ducksboard/gridster.js/master/dist/jquery.gridster.min.js \
+    -o vendor/assets/javascripts/gridster/jquery.gridster.min.js
+
+RUN mkdir -p vendor/assets/javascripts && \
+    curl -L https://raw.githubusercontent.com/lou/multi-select/master/js/jquery.multi-select.js \
+    -o vendor/assets/javascripts/jquery.multi-select.js
+
+RUN mkdir -p vendor/assets/stylesheets/gridster && \
+    curl -L https://raw.githubusercontent.com/ducksboard/gridster.js/master/dist/jquery.gridster.min.css \
+    -o vendor/assets/stylesheets/gridster/jquery.gridster.min.css
+
+RUN mkdir -p vendor/assets/stylesheets && \
+    curl -L https://raw.githubusercontent.com/lou/multi-select/master/css/multi-select.css \
+    -o vendor/assets/stylesheets/jquery.multi-select.css
+
 # Precompile assets
 RUN bundle exec rake assets:precompile RAILS_ENV=development
 
-# Create startup script with database initialization and basic setup
-RUN echo '#!/bin/bash \n\
-bundle exec rake db:drop db:create \n\
-bundle exec rake ss:create_site data="{ name: \"SHIRASAGI\", host: \"www\", domains: \"localhost:3000\" }" \n\
-bundle exec rake ss:create_user data="{ name: \"システム管理者\", email: \"sys@example.jp\", password: \"pass\" }" \n\
-echo "Creating basic content..." \n\
-bundle exec rails r "Cms::Node.create!(site_id: 1, name: \"トップページ\", filename: \"index\", route: \"cms/node\", state: \"public\")" || true \n\
-bundle exec rails r "Cms::Page.create!(site_id: 1, name: \"トップページ\", filename: \"index\", route: \"cms/page\", state: \"public\", html: \"<h1>Welcome to SHIRASAGI</h1><p>This is the demo site.</p>\")" || true \n\
-echo "Starting Rails server..." \n\
-bundle exec rails s -b 0.0.0.0 -p 3000 \
-' > /app/start.sh && \
-chmod +x /app/start.sh
+COPY ./shirasagi/start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
 # Container startup command in development mode
 ENV RAILS_ENV=development
