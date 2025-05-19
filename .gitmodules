@@ -1,0 +1,3 @@
+[submodule "shirasagi"]
+	path = shirasagi
+	url = git@github.com:emilyyu13/shirasagi.git
